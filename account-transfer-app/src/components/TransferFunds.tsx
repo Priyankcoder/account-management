@@ -6,6 +6,18 @@ import {
   formatCurrency,
 } from "../utils/validation";
 import type { ApiError, TransactionResponse } from "../types";
+import {
+  TransferIcon,
+  CreditCardIcon,
+  BankIcon,
+  DollarIcon,
+  CheckIcon,
+  AlertIcon,
+  CheckCircleIcon,
+  ArrowRightIcon,
+  ArrowForwardIcon,
+  SpinnerIcon
+} from "./icons";
 
 interface TransferFundsProps {
   onTransferComplete: () => void;
@@ -100,19 +112,7 @@ export const TransferFunds = ({ onTransferComplete }: TransferFundsProps) => {
     <div className="bg-white/90 backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 shadow-2xl border border-gray-100 card-hover animate-scale-in">
       <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
         <div className="p-1.5 sm:p-2 bg-gradient-to-br from-triplea-navy to-triplea-navy/80 rounded-lg">
-          <svg
-            className="w-5 h-5 sm:w-6 sm:h-6 text-triplea-green"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"
-            />
-          </svg>
+          <TransferIcon className="w-5 h-5 sm:w-6 sm:h-6 text-triplea-green" />
         </div>
         <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-triplea-navy">
           Transfer Funds
@@ -128,19 +128,7 @@ export const TransferFunds = ({ onTransferComplete }: TransferFundsProps) => {
               Source
             </span>
           </div>
-          <svg
-            className="w-5 h-5 sm:w-6 sm:h-6 text-triplea-green animate-pulse"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M14 5l7 7m0 0l-7 7m7-7H3"
-            />
-          </svg>
+          <ArrowRightIcon className="w-5 h-5 sm:w-6 sm:h-6 text-triplea-green animate-pulse" />
           <div className="flex items-center gap-1.5 sm:gap-2">
             <span className="text-xs sm:text-sm font-medium text-gray-600">
               Destination
@@ -154,19 +142,7 @@ export const TransferFunds = ({ onTransferComplete }: TransferFundsProps) => {
             htmlFor="sourceAccountId"
             className="block mb-2 text-sm sm:text-base text-triplea-navy font-semibold flex items-center gap-2"
           >
-            <svg
-              className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-500"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
-              />
-            </svg>
+            <CreditCardIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-500" />
             From Account ID
           </label>
           <div className="relative">
@@ -194,36 +170,12 @@ export const TransferFunds = ({ onTransferComplete }: TransferFundsProps) => {
               placeholder="Enter source account ID"
             />
             {sourceAccountId && !validationErrors.sourceAccountId && (
-              <svg
-                className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-triplea-green animate-scale-in"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M5 13l4 4L19 7"
-                />
-              </svg>
+              <CheckIcon className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-triplea-green animate-scale-in" />
             )}
           </div>
           {validationErrors.sourceAccountId && (
             <div className="flex items-center gap-1 text-red-600 text-sm mt-2 animate-slide-in">
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
+              <AlertIcon className="w-4 h-4" />
               {validationErrors.sourceAccountId}
             </div>
           )}
@@ -234,19 +186,7 @@ export const TransferFunds = ({ onTransferComplete }: TransferFundsProps) => {
             htmlFor="destinationAccountId"
             className="block mb-2 text-sm sm:text-base text-triplea-navy font-semibold flex items-center gap-2"
           >
-            <svg
-              className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-green-500"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"
-              />
-            </svg>
+            <BankIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-green-500" />
             To Account ID
           </label>
           <div className="relative">
@@ -274,36 +214,12 @@ export const TransferFunds = ({ onTransferComplete }: TransferFundsProps) => {
               placeholder="Enter destination account ID"
             />
             {destinationAccountId && !validationErrors.destinationAccountId && (
-              <svg
-                className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-triplea-green animate-scale-in"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M5 13l4 4L19 7"
-                />
-              </svg>
+              <CheckIcon className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-triplea-green animate-scale-in" />
             )}
           </div>
           {validationErrors.destinationAccountId && (
             <div className="flex items-center gap-1 text-red-600 text-sm mt-2 animate-slide-in">
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
+              <AlertIcon className="w-4 h-4" />
               {validationErrors.destinationAccountId}
             </div>
           )}
@@ -314,19 +230,7 @@ export const TransferFunds = ({ onTransferComplete }: TransferFundsProps) => {
             htmlFor="amount"
             className="block mb-2 text-sm sm:text-base text-triplea-navy font-semibold flex items-center gap-2"
           >
-            <svg
-              className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-triplea-green"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
+            <DollarIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-triplea-green" />
             Transfer Amount
           </label>
           <div className="relative">
@@ -357,36 +261,12 @@ export const TransferFunds = ({ onTransferComplete }: TransferFundsProps) => {
               placeholder="Enter transfer amount"
             />
             {amount && !validationErrors.amount && (
-              <svg
-                className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-triplea-green animate-scale-in"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M5 13l4 4L19 7"
-                />
-              </svg>
+              <CheckIcon className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-triplea-green animate-scale-in" />
             )}
           </div>
           {validationErrors.amount && (
             <div className="flex items-center gap-1 text-red-600 text-sm mt-2 animate-slide-in">
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
+              <AlertIcon className="w-4 h-4" />
               {validationErrors.amount}
             </div>
           )}
@@ -394,19 +274,7 @@ export const TransferFunds = ({ onTransferComplete }: TransferFundsProps) => {
 
         {error && (
           <div className="bg-gradient-to-r from-red-50 to-red-100/50 border-l-4 border-red-500 text-red-800 px-5 py-4 rounded-lg shadow-sm animate-slide-in flex items-start gap-3">
-            <svg
-              className="w-5 h-5 flex-shrink-0 mt-0.5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
+            <AlertIcon className="w-5 h-5 flex-shrink-0 mt-0.5" />
             <span>{error}</span>
           </div>
         )}
@@ -414,19 +282,7 @@ export const TransferFunds = ({ onTransferComplete }: TransferFundsProps) => {
         {success && (
           <div className="bg-gradient-to-r from-green-50 to-emerald-100/50 border-l-4 border-triplea-green text-green-800 px-5 py-4 rounded-lg shadow-sm animate-scale-in">
             <div className="flex items-start gap-3">
-              <svg
-                className="w-5 h-5 flex-shrink-0 mt-0.5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
+              <CheckCircleIcon className="w-5 h-5 flex-shrink-0 mt-0.5" />
               <div>
                 <p className="font-semibold mb-1">Transfer Successful!</p>
                 <p className="text-sm">
@@ -456,42 +312,12 @@ export const TransferFunds = ({ onTransferComplete }: TransferFundsProps) => {
           <span className="relative z-10 flex items-center justify-center gap-1.5 sm:gap-2">
             {loading ? (
               <>
-                <svg
-                  className="animate-spin w-5 h-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  ></circle>
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  ></path>
-                </svg>
+                <SpinnerIcon className="animate-spin w-5 h-5" />
                 Processing Transfer...
               </>
             ) : (
               <>
-                <svg
-                  className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M13 7l5 5m0 0l-5 5m5-5H6"
-                  />
-                </svg>
+                <ArrowForwardIcon className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
                 Execute Transfer
               </>
             )}
