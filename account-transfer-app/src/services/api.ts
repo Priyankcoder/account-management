@@ -11,6 +11,9 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
   ? `${import.meta.env.VITE_API_BASE_URL}`
   : "/api";
 
+const NETWORK_ERROR_MESSAGE =
+  "Network error: Unable to connect to the server. Please try again later.";
+
 class ApiService {
   private async handleResponse<T>(response: Response): Promise<T> {
     if (!response.ok) {
@@ -41,8 +44,7 @@ class ApiService {
         throw error;
       }
       throw {
-        message:
-          "Network error: Unable to connect to the server. Please ensure the backend is running.",
+        message: NETWORK_ERROR_MESSAGE,
       } as ApiError;
     }
   }
@@ -62,8 +64,7 @@ class ApiService {
         throw error;
       }
       throw {
-        message:
-          "Network error: Unable to connect to the server. Please ensure the backend is running.",
+        message: NETWORK_ERROR_MESSAGE,
       } as ApiError;
     }
   }
@@ -86,8 +87,7 @@ class ApiService {
         throw error;
       }
       throw {
-        message:
-          "Network error: Unable to connect to the server. Please ensure the backend is running.",
+        message: NETWORK_ERROR_MESSAGE,
       } as ApiError;
     }
   }
