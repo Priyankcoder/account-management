@@ -14,53 +14,15 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 class ApiService {
   private async handleResponse<T>(response: Response): Promise<T> {
     if (!response.ok) {
-      let errorMessage = `HTTP error! status: ${response.status}`;
-
-      try {
-        // First, get the response text
-        const responseText = await response.text();
-
-        // Try to parse as JSON
-        try {
-          const errorData = JSON.parse(responseText);
-
-          // Extract error message from various possible formats
-          if (errorData.message) {
-            errorMessage = errorData.message;
-          } else if (errorData.error) {
-            errorMessage =
-              typeof errorData.error === "string"
-                ? errorData.error
-                : errorData.error.message || JSON.stringify(errorData.error);
-          } else if (errorData.detail) {
-            errorMessage = errorData.detail;
-          }
-        } catch {
-          // If JSON parsing fails, use the plain text response
-          if (responseText && responseText.trim()) {
-            errorMessage = responseText.trim();
-          }
-        }
-      } catch {
-        // If reading response fails, provide user-friendly messages based on status
-        if (response.status === 404) {
-          errorMessage = "Account not found. Please check the account ID.";
-        } else if (response.status === 400) {
-          errorMessage = "Invalid request. Please check your input.";
-        } else if (response.status === 409) {
-          errorMessage = "Account already exists with this ID.";
-        } else if (response.status >= 500) {
-          errorMessage = "Server error. Please try again later.";
-        }
-      }
-
+      const errorMessage = await response.text();
       throw {
-        message: errorMessage,
+        message: errorMessage || `HTTP error! status: ${response.status}`,
         status: response.status,
       } as ApiError;
     }
 
-    return response.json();
+    const text = await response.text();
+    return text ? JSON.parse(text) : ({} as T);
   }
 
   async createAccount(data: CreateAccountRequest): Promise<Account> {
