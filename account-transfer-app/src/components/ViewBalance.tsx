@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { apiService } from '../services/api';
 import { validateAccountId, handleNumericInput, formatCurrency } from '../utils/validation';
+import { INPUT_ERROR_CLASSES, INPUT_SUCCESS_CLASSES } from '../utils/styles';
 import type { ApiError, Account } from '../types';
 import {
   EyeIcon,
@@ -74,8 +75,8 @@ export const ViewBalance = () => {
               }}
               className={`w-full px-3 sm:px-4 py-2.5 sm:py-3.5 border-2 rounded-lg sm:rounded-xl text-sm sm:text-base transition-all duration-300 focus-glow ${
                 validationError
-                  ? 'border-red-400 focus:border-red-500 bg-red-50/50'
-                  : 'border-gray-200 focus:border-triplea-green-muted hover:border-gray-300 bg-white'
+                  ? INPUT_ERROR_CLASSES
+                  : INPUT_SUCCESS_CLASSES
               } focus:outline-none placeholder:text-gray-400`}
               disabled={loading}
               placeholder="Enter account ID to check balance"

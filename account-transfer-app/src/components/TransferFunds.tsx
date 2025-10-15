@@ -7,6 +7,7 @@ import {
   handleNumericInput,
   formatCurrency,
 } from "../utils/validation";
+import { INPUT_ERROR_CLASSES, INPUT_SUCCESS_CLASSES } from "../utils/styles";
 import type { ApiError, TransactionResponse } from "../types";
 import {
   TransferIcon,
@@ -147,8 +148,8 @@ export const TransferFunds = ({ onTransferComplete }: TransferFundsProps) => {
               }}
               className={`w-full px-3 sm:px-4 py-2.5 sm:py-3.5 border-2 rounded-lg sm:rounded-xl text-sm sm:text-base transition-all duration-300 focus-glow ${
                 validationErrors.sourceAccountId
-                  ? "border-red-400 focus:border-red-500 bg-red-50/50"
-                  : "border-gray-200 focus:border-triplea-green-muted hover:border-gray-300 bg-white"
+                  ? INPUT_ERROR_CLASSES
+                  : INPUT_SUCCESS_CLASSES
               } focus:outline-none placeholder:text-gray-400`}
               disabled={loading}
               placeholder="Enter source account ID"
@@ -191,8 +192,8 @@ export const TransferFunds = ({ onTransferComplete }: TransferFundsProps) => {
               }}
               className={`w-full px-3 sm:px-4 py-2.5 sm:py-3.5 border-2 rounded-lg sm:rounded-xl text-sm sm:text-base transition-all duration-300 focus-glow ${
                 validationErrors.destinationAccountId
-                  ? "border-red-400 focus:border-red-500 bg-red-50/50"
-                  : "border-gray-200 focus:border-triplea-green-muted hover:border-gray-300 bg-white"
+                  ? INPUT_ERROR_CLASSES
+                  : INPUT_SUCCESS_CLASSES
               } focus:outline-none placeholder:text-gray-400`}
               disabled={loading}
               placeholder="Enter destination account ID"
@@ -238,8 +239,8 @@ export const TransferFunds = ({ onTransferComplete }: TransferFundsProps) => {
               }}
               className={`w-full pl-7 sm:pl-8 pr-3 sm:pr-4 py-2.5 sm:py-3.5 border-2 rounded-lg sm:rounded-xl text-sm sm:text-base transition-all duration-300 focus-glow ${
                 validationErrors.amount
-                  ? "border-red-400 focus:border-red-500 bg-red-50/50"
-                  : "border-gray-200 focus:border-triplea-green-muted hover:border-gray-300 bg-white"
+                  ? INPUT_ERROR_CLASSES
+                  : INPUT_SUCCESS_CLASSES
               } focus:outline-none placeholder:text-gray-400`}
               disabled={loading}
               placeholder="Enter transfer amount"
