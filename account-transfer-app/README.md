@@ -1,4 +1,4 @@
-# Account Management System
+# Account Transfer App
 
 A modern web application for managing financial accounts and executing internal fund transfers. Built with React, TypeScript, and Vite.
 
