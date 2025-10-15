@@ -12,7 +12,7 @@ export const Header = ({ activeTab, onTabChange }: HeaderProps) => {
   return (
     <header className="bg-white/80 backdrop-blur-md shadow-sm border-b border-gray-200/50 sticky top-0 z-50 animate-slide-in">
       <div className="px-4 sm:px-8 pt-4 sm:pt-6 pb-0">
-        <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-8 mb-4 sm:mb-6">
+        <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-16 mb-4 sm:mb-6">
           <div className="flex items-center flex-shrink-0 animate-scale-in">
             <img
               src={tripleALogo}
