@@ -1,0 +1,220 @@
+
+import { useState } from 'react';
+import { apiService } from '../services/api';
+import { validateAccountId, validateAmount } from '../utils/validation';
+import type { ApiError } from '../types';
+
+interface CreateAccountProps {
+  onAccountCreated: () => void;
+}
+
+export const CreateAccount = ({ onAccountCreated }: CreateAccountProps) => {
+  const [accountId, setAccountId] = useState('');
+  const [initialBalance, setInitialBalance] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+  const [validationErrors, setValidationErrors] = useState<{
+    accountId?: string;
+    initialBalance?: string;
+  }>({});
+
+  const handleNumericInput = (value: string, allowDecimals: boolean = false): string => {
+    if (allowDecimals) {
+      // Allow numbers and decimal point
+      return value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');
+    }
+    // Allow only integers
+    return value.replace(/[^0-9]/g, '');
+  };
+
+  const validateForm = (): boolean => {
+    const errors: { accountId?: string; initialBalance?: string } = {};
+    
+    const accountIdError = validateAccountId(accountId);
+    if (accountIdError) errors.accountId = accountIdError;
+    
+    const balanceError = validateAmount(initialBalance);
+    if (balanceError) errors.initialBalance = balanceError;
+    
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    setSuccess(null);
+
+    if (!validateForm()) {
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      await apiService.createAccount({
+        account_id: Number(accountId),
+        initial_balance: initialBalance,
+      });
+
+      setSuccess(`Account ${accountId} created successfully with balance ${initialBalance}`);
+      setAccountId('');
+      setInitialBalance('');
+      setValidationErrors({});
+      onAccountCreated();
+    } catch (err) {
+      setError((err as ApiError).message || 'Failed to create account');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="bg-white/90 backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 shadow-2xl border border-gray-100 card-hover animate-scale-in">
+      <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
+        <div className="p-1.5 sm:p-2 bg-gradient-to-br from-triplea-navy to-triplea-navy/80 rounded-lg">
+          <svg className="w-5 h-5 sm:w-6 sm:h-6 text-triplea-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+          </svg>
+        </div>
+        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-triplea-navy">Create New Account</h2>
+      </div>
+      
+      <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+        <div className="group">
+          <label htmlFor="accountId" className="block mb-2 text-sm sm:text-base text-triplea-navy font-semibold flex items-center gap-2">
+            <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-triplea-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" />
+            </svg>
+            Account ID
+          </label>
+          <div className="relative">
+            <input
+              id="accountId"
+              type="text"
+              inputMode="numeric"
+              value={accountId}
+              onChange={(e) => {
+                const numericValue = handleNumericInput(e.target.value, false);
+                setAccountId(numericValue);
+                if (validationErrors.accountId) {
+                  setValidationErrors({ ...validationErrors, accountId: undefined });
+                }
+              }}
+              className={`w-full px-3 sm:px-4 py-2.5 sm:py-3.5 border-2 rounded-lg sm:rounded-xl text-sm sm:text-base transition-all duration-300 focus-glow ${
+                validationErrors.accountId
+                  ? 'border-red-400 focus:border-red-500 bg-red-50/50'
+                  : 'border-gray-200 focus:border-triplea-green-muted hover:border-gray-300 bg-white'
+              } focus:outline-none placeholder:text-gray-400`}
+              disabled={loading}
+              placeholder="Enter numeric account ID (e.g., 123)"
+            />
+            {accountId && !validationErrors.accountId && (
+              <svg className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-triplea-green animate-scale-in" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+            )}
+          </div>
+          {validationErrors.accountId && (
+            <div className="flex items-center gap-1 text-red-600 text-sm mt-2 animate-slide-in">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              {validationErrors.accountId}
+            </div>
+          )}
+        </div>
+
+        <div className="group">
+          <label htmlFor="initialBalance" className="block mb-2 text-sm sm:text-base text-triplea-navy font-semibold flex items-center gap-2">
+            <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-triplea-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Initial Balance
+          </label>
+          <div className="relative">
+            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-medium">$</span>
+            <input
+              id="initialBalance"
+              type="text"
+              inputMode="decimal"
+              value={initialBalance}
+              onChange={(e) => {
+                const numericValue = handleNumericInput(e.target.value, true);
+                setInitialBalance(numericValue);
+                if (validationErrors.initialBalance) {
+                  setValidationErrors({ ...validationErrors, initialBalance: undefined });
+                }
+              }}
+              className={`w-full pl-7 sm:pl-8 pr-3 sm:pr-4 py-2.5 sm:py-3.5 border-2 rounded-lg sm:rounded-xl text-sm sm:text-base transition-all duration-300 focus-glow ${
+                validationErrors.initialBalance
+                  ? 'border-red-400 focus:border-red-500 bg-red-50/50'
+                  : 'border-gray-200 focus:border-triplea-green-muted hover:border-gray-300 bg-white'
+              } focus:outline-none placeholder:text-gray-400`}
+              disabled={loading}
+              placeholder="Enter amount (e.g., 100.50)"
+            />
+            {initialBalance && !validationErrors.initialBalance && (
+              <svg className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-triplea-green animate-scale-in" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+            )}
+          </div>
+          {validationErrors.initialBalance && (
+            <div className="flex items-center gap-1 text-red-600 text-sm mt-2 animate-slide-in">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              {validationErrors.initialBalance}
+            </div>
+          )}
+        </div>
+
+        {error && (
+          <div className="bg-gradient-to-r from-red-50 to-red-100/50 border-l-4 border-red-500 text-red-800 px-5 py-4 rounded-lg shadow-sm animate-slide-in flex items-start gap-3">
+            <svg className="w-5 h-5 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>{error}</span>
+          </div>
+        )}
+        
+        {success && (
+          <div className="bg-gradient-to-r from-green-50 to-emerald-100/50 border-l-4 border-triplea-green text-green-800 px-5 py-4 rounded-lg shadow-sm animate-scale-in flex items-start gap-3">
+            <svg className="w-5 h-5 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>{success}</span>
+          </div>
+        )}
+
+        <button
+          type="submit"
+          disabled={loading}
+          className="group w-full px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-triplea-navy to-triplea-navy/90 text-white rounded-lg sm:rounded-xl font-semibold text-sm sm:text-base cursor-pointer transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 disabled:from-gray-400 disabled:to-gray-400 disabled:cursor-not-allowed disabled:transform-none btn-ripple relative overflow-hidden"
+        >
+          <span className="relative z-10 flex items-center justify-center gap-1.5 sm:gap-2">
+            {loading ? (
+              <>
+                <svg className="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Creating Account...
+              </>
+            ) : (
+              <>
+                <svg className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
+                Create Account
+              </>
+            )}
+          </span>
+          <div className="absolute inset-0 bg-gradient-to-r from-triplea-green/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        </button>
+      </form>
+    </div>
+  );
+};
