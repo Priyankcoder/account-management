@@ -19,7 +19,7 @@ import {
   CheckCircleIcon,
   ArrowRightIcon,
   ArrowForwardIcon,
-  SpinnerIcon
+  SpinnerIcon,
 } from "./icons";
 
 interface TransferFundsProps {
@@ -33,6 +33,11 @@ export const TransferFunds = ({ onTransferComplete }: TransferFundsProps) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<TransactionResponse | null>(null);
+  const [lastTransfer, setLastTransfer] = useState<{
+    source: string;
+    destination: string;
+    amount: string;
+  } | null>(null);
   const [validationErrors, setValidationErrors] = useState<{
     sourceAccountId?: string;
     destinationAccountId?: string;
@@ -55,8 +60,12 @@ export const TransferFunds = ({ onTransferComplete }: TransferFundsProps) => {
     const amountError = validateAmount(amount);
     if (amountError) errors.amount = amountError;
 
-    const accountsDifferentError = validateAccountsAreDifferent(sourceAccountId, destinationAccountId);
-    if (accountsDifferentError) errors.destinationAccountId = accountsDifferentError;
+    const accountsDifferentError = validateAccountsAreDifferent(
+      sourceAccountId,
+      destinationAccountId
+    );
+    if (accountsDifferentError)
+      errors.destinationAccountId = accountsDifferentError;
 
     setValidationErrors(errors);
     return Object.keys(errors).length === 0;
@@ -74,6 +83,13 @@ export const TransferFunds = ({ onTransferComplete }: TransferFundsProps) => {
     setLoading(true);
 
     try {
+      // Store the transfer details before clearing the form
+      const transferDetails = {
+        source: sourceAccountId,
+        destination: destinationAccountId,
+        amount: amount,
+      };
+
       const result = await apiService.executeTransaction({
         source_account_id: Number(sourceAccountId),
         destination_account_id: Number(destinationAccountId),
@@ -81,6 +97,7 @@ export const TransferFunds = ({ onTransferComplete }: TransferFundsProps) => {
       });
 
       setSuccess(result);
+      setLastTransfer(transferDetails);
       setSourceAccountId("");
       setDestinationAccountId("");
       setAmount("");
@@ -264,7 +281,7 @@ export const TransferFunds = ({ onTransferComplete }: TransferFundsProps) => {
           </div>
         )}
 
-        {success && (
+        {success && lastTransfer && (
           <div className="bg-gradient-to-r from-green-50 to-emerald-100/50 border-l-4 border-triplea-green text-green-800 px-5 py-4 rounded-lg shadow-sm animate-scale-in">
             <div className="flex items-start gap-3">
               <CheckCircleIcon className="w-5 h-5 flex-shrink-0 mt-0.5" />
@@ -273,15 +290,16 @@ export const TransferFunds = ({ onTransferComplete }: TransferFundsProps) => {
                 <p className="text-sm">
                   Successfully transferred{" "}
                   <span className="font-bold">
-                    {formatCurrency(success.amount)}
+                    {formatCurrency(success.amount || lastTransfer.amount)}
                   </span>{" "}
                   from account{" "}
                   <span className="font-bold">
-                    #{success.source_account_id}
+                    #{success.source_account_id || lastTransfer.source}
                   </span>{" "}
                   to account{" "}
                   <span className="font-bold">
-                    #{success.destination_account_id}
+                    #
+                    {success.destination_account_id || lastTransfer.destination}
                   </span>
                 </p>
               </div>
