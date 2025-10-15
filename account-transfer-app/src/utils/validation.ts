@@ -38,6 +38,25 @@ export const validateAmount = (value: string): string | null => {
   return null;
 };
 
+export const validateAccountsAreDifferent = (
+  sourceAccountId: string,
+  destinationAccountId: string
+): string | null => {
+  if (sourceAccountId && destinationAccountId && sourceAccountId === destinationAccountId) {
+    return 'Destination account must be different from source account';
+  }
+  return null;
+};
+
+export const handleNumericInput = (value: string, allowDecimals: boolean = false): string => {
+  if (allowDecimals) {
+    // Allow numbers and decimal point
+    return value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');
+  }
+  // Allow only integers
+  return value.replace(/[^0-9]/g, '');
+};
+
 export const formatCurrency = (amount: string): string => {
   const numValue = parseFloat(amount);
   if (isNaN(numValue)) return amount;

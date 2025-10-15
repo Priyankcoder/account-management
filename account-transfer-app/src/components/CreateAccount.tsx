@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import { apiService } from '../services/api';
-import { validateAccountId, validateAmount } from '../utils/validation';
+import { validateAccountId, validateAmount, handleNumericInput } from '../utils/validation';
 import type { ApiError } from '../types';
 import {
   PlusIcon,
@@ -27,15 +27,6 @@ export const CreateAccount = ({ onAccountCreated }: CreateAccountProps) => {
     accountId?: string;
     initialBalance?: string;
   }>({});
-
-  const handleNumericInput = (value: string, allowDecimals: boolean = false): string => {
-    if (allowDecimals) {
-      // Allow numbers and decimal point
-      return value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');
-    }
-    // Allow only integers
-    return value.replace(/[^0-9]/g, '');
-  };
 
   const validateForm = (): boolean => {
     const errors: { accountId?: string; initialBalance?: string } = {};

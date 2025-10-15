@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import { apiService } from '../services/api';
-import { validateAccountId, formatCurrency } from '../utils/validation';
+import { validateAccountId, handleNumericInput, formatCurrency } from '../utils/validation';
 import type { ApiError, Account } from '../types';
 import {
   EyeIcon,
@@ -20,11 +20,6 @@ export const ViewBalance = () => {
   const [error, setError] = useState<string | null>(null);
   const [account, setAccount] = useState<Account | null>(null);
   const [validationError, setValidationError] = useState<string | null>(null);
-
-  const handleNumericInput = (value: string): string => {
-    // Allow only integers
-    return value.replace(/[^0-9]/g, '');
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

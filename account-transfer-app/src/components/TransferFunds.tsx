@@ -3,6 +3,8 @@ import { apiService } from "../services/api";
 import {
   validateAccountId,
   validateAmount,
+  validateAccountsAreDifferent,
+  handleNumericInput,
   formatCurrency,
 } from "../utils/validation";
 import type { ApiError, TransactionResponse } from "../types";
@@ -36,18 +38,6 @@ export const TransferFunds = ({ onTransferComplete }: TransferFundsProps) => {
     amount?: string;
   }>({});
 
-  const handleNumericInput = (
-    value: string,
-    allowDecimals: boolean = false
-  ): string => {
-    if (allowDecimals) {
-      // Allow numbers and decimal point
-      return value.replace(/[^0-9.]/g, "").replace(/(\..*?)\..*/g, "$1");
-    }
-    // Allow only integers
-    return value.replace(/[^0-9]/g, "");
-  };
-
   const validateForm = (): boolean => {
     const errors: {
       sourceAccountId?: string;
@@ -64,14 +54,8 @@ export const TransferFunds = ({ onTransferComplete }: TransferFundsProps) => {
     const amountError = validateAmount(amount);
     if (amountError) errors.amount = amountError;
 
-    if (
-      !sourceError &&
-      !destError &&
-      sourceAccountId === destinationAccountId
-    ) {
-      errors.destinationAccountId =
-        "Destination account must be different from source account";
-    }
+    const accountsDifferentError = validateAccountsAreDifferent(sourceAccountId, destinationAccountId);
+    if (accountsDifferentError) errors.destinationAccountId = accountsDifferentError;
 
     setValidationErrors(errors);
     return Object.keys(errors).length === 0;
