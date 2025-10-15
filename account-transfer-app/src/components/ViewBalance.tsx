@@ -65,6 +65,7 @@ export const ViewBalance = () => {
               id="viewAccountId"
               type="text"
               inputMode="numeric"
+              autoComplete="off"
               value={accountId}
               onChange={(e) => {
                 const numericValue = handleNumericInput(e.target.value);

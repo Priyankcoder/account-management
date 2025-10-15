@@ -152,6 +152,7 @@ export const TransferFunds = ({ onTransferComplete }: TransferFundsProps) => {
               id="sourceAccountId"
               type="text"
               inputMode="numeric"
+              autoComplete="off"
               value={sourceAccountId}
               onChange={(e) => {
                 const numericValue = handleNumericInput(e.target.value, false);
@@ -196,6 +197,7 @@ export const TransferFunds = ({ onTransferComplete }: TransferFundsProps) => {
               id="destinationAccountId"
               type="text"
               inputMode="numeric"
+              autoComplete="off"
               value={destinationAccountId}
               onChange={(e) => {
                 const numericValue = handleNumericInput(e.target.value, false);
@@ -243,6 +245,7 @@ export const TransferFunds = ({ onTransferComplete }: TransferFundsProps) => {
               id="amount"
               type="text"
               inputMode="decimal"
+              autoComplete="off"
               value={amount}
               onChange={(e) => {
                 const numericValue = handleNumericInput(e.target.value, true);

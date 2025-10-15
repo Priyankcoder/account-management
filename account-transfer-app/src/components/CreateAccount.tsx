@@ -91,6 +91,7 @@ export const CreateAccount = ({ onAccountCreated }: CreateAccountProps) => {
               id="accountId"
               type="text"
               inputMode="numeric"
+              autoComplete="off"
               value={accountId}
               onChange={(e) => {
                 const numericValue = handleNumericInput(e.target.value, false);
@@ -130,6 +131,7 @@ export const CreateAccount = ({ onAccountCreated }: CreateAccountProps) => {
               id="initialBalance"
               type="text"
               inputMode="decimal"
+              autoComplete="off"
               value={initialBalance}
               onChange={(e) => {
                 const numericValue = handleNumericInput(e.target.value, true);
